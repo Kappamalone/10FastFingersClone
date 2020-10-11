@@ -40,7 +40,6 @@ function wordEntered(){
             } else {
                 currentWord.style.color = 'red'
             }
-            wordCorrect = true
     
             //Handles wrapping of the word counter
             wordCounter += 1
@@ -48,6 +47,7 @@ function wordEntered(){
                 wordCounter %= wordsPerPage
                 wordBatchFinished = true //TODO: change word batch
                 //TODO: remove all css from word1 -> wordsPerPage
+                resetCSS()
             }
             console.log(wordCounter)
     
@@ -77,4 +77,12 @@ function verifyInput(currentTyped, currentWord){
         }
     }
     return true
+}
+
+function resetCSS(){
+    //Reset CSS of the finished batch of words
+    for (let i = 0; i < wordsPerPage; i++){
+        let element = document.getElementById('word'+String(i+1)) 
+        element.style.color = 'black'
+    }
 }
