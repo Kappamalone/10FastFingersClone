@@ -2,7 +2,6 @@
 wordCounter = 1; //used to access the current word
 wordsPerPage = 3; //how many words per page displayed to user
 wordBatchFinished = false; //determine if words per page has been completed
-wordCorrect = true //determine if word entered was correct (going the extra mile to mimic 10FastFingers here =.=)
 
 console.log(wordCounter)
 
@@ -10,44 +9,50 @@ console.log(wordCounter)
 function handleInput(){
     //compare both words to highlight either green or red
     let currentTyped = document.getElementById('inputText').value
-    let currentWord = getCurrentWord().textContent
+    let currentWord = getCurrentWord(wordCounter)
     let correctFlag = true //Whether or not what is typed is actually correct
 
     if (currentTyped){ //Make sure theres actually something there in the field
-        correctFlag = verifyInput(currentTyped,currentWord)
+        correctFlag = verifyInput(currentTyped,currentWord.textContent)
         console.log(correctFlag)
 
-        //Manipulate color of current word
-        if (!correctFlag){ //TODO: Look to changing the background
-            getCurrentWord().style.color = 'red'
-            wordCorrect = false
+        //Manipulate background of current word
+        if (!correctFlag){
+            currentWord.style.backgroundColor = 'red'
         } else {
-            //Remove color if all text deleted
-            getCurrentWord().style.color = 'black'
+            currentWord.style.backgroundColor = 'transparent'
         }
+    } else {
+        //Remove color if all text deleted
+        currentWord.style.backgroundColor = 'transparent'
     }
 }
 
 function wordEntered(){
-    if (event.key === 'Enter'){
-        //Handles setting color of word entered
-        //TODO: Look to changing the background
-        if (wordCorrect){
-            getCurrentWord().style.color = 'green'
+    let currentTyped = document.getElementById('inputText').value
+    let currentWord = getCurrentWord(wordCounter)
+    if (currentTyped){
+        if (event.key === 'Enter'){
+            //Handles setting color of word entered
+            currentWord.style.backgroundColor = 'transparent'
+            if (currentTyped === currentWord.textContent){
+                currentWord.style.color = 'green'
+            } else {
+                currentWord.style.color = 'red'
+            }
+            wordCorrect = true
+    
+            //Handles wrapping of the word counter
+            wordCounter += 1
+            if (wordCounter > wordsPerPage){
+                wordCounter %= wordsPerPage
+                wordBatchFinished = true //TODO: change word batch
+                //TODO: remove all css from word1 -> wordsPerPage
+            }
+            console.log(wordCounter)
+    
+            document.getElementById('inputText').value = '' //Reset input
         }
-
-        wordCorrect = true
-
-        //Handles wrapping of the word counter
-        wordCounter += 1
-        if (wordCounter > wordsPerPage){
-            wordCounter %= wordsPerPage
-            wordBatchFinished = true //TODO: change word batch
-            //TODO: remove all css from word1 -> wordsPerPage
-        }
-        console.log(wordCounter)
-
-        document.getElementById('inputText').value = '' //Reset input
     }
 }
 
@@ -58,9 +63,9 @@ function randWords(){
     //10 random words
 }
 
-function getCurrentWord(){
+function getCurrentWord(index){
     //gets current word
-    let currWord = document.getElementById('word'+String(wordCounter))
+    let currWord = document.getElementById('word'+String(index))
     return currWord
 }
 
