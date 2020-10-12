@@ -15,18 +15,27 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 </head>
-<body>
+<body onload = "readWordFile()">
     <div class="container">
         <div class="row">
             
         </div>
-        <div class="row">
+        <div class="row mt-5">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body text-center">
-                      <span id = 'word1' class = 'mr-5'>word1</span>
-                      <span id = 'word2' class = 'mr-5'>word2</span>
-                      <span id = 'word3' class = 'mr-5'>word3</span>
+                        <!--
+                        <span id = 'word1' class = 'mr-5'>word1</span>
+                        <span id = 'word2' class = 'mr-5'>word2</span>
+                        <span id = 'word3' class = 'mr-5'>word3</span>-->
+                        <div id="app">
+                            <type-word
+                                v-for='word in wordBatchData'
+                                v-bind:words='word'
+                                v-bind:id = `word${word.id+1}`
+                                v-bind:key='word.id'
+                            ></type-word>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,12 +49,10 @@
     </div>
 
     <div class='row mt-5'>
-        <div class="col-1"></div>
-        <div class="col-10 text-center">
+        <div class="col-12 text-center">
             <hr>
             <small class = 'small-details'>Zawahir Studios | <a href="#" class = 'text-muted'>Terms and Conditions </a>|<a href="#" class = 'text-muted'> Privacy Policy</a></small>
         </div>
-        <div class="col-1"></div>
     </div>
 </body>
 <script src="/controllers/client.js"></script>
