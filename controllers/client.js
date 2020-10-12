@@ -1,9 +1,7 @@
 /*===========GLOBAL VARS===========*/
 wordCounter = 1; //used to access the current word
-wordsPerPage = 3; //how many words per page displayed to user
-wordBatchFinished = false; //determine if words per page has been completed
-
-console.log(wordCounter)
+wordsPerPage = 9; //how many words per page displayed to user
+wordBatch = null
 
 /*===========DOM FUNCTIONS===========*/
 function handleInput(){
@@ -17,10 +15,10 @@ function handleInput(){
         console.log(correctFlag)
 
         //Manipulate background of current word
-        if (!correctFlag){
-            currentWord.style.backgroundColor = 'red'
+        if (correctFlag){
+            currentWord.style.backgroundColor = 'grey'
         } else {
-            currentWord.style.backgroundColor = 'transparent'
+            currentWord.style.backgroundColor = 'red'
         }
     } else {
         //Remove color if all text deleted
@@ -45,9 +43,9 @@ function wordEntered(){
             wordCounter += 1
             if (wordCounter > wordsPerPage){
                 wordCounter %= wordsPerPage
-                wordBatchFinished = true //TODO: change word batch
-                //TODO: remove all css from word1 -> wordsPerPage
-                resetCSS()
+
+                resetCSS() //resets css of word components
+                setWordBatch(randWords()) //sets a new batch of words
             }
             console.log(wordCounter)
     
@@ -56,11 +54,52 @@ function wordEntered(){
     }
 }
 
+/*===========VUE COMPONENTS===========*/
+
+Vue.component('type-word', {
+    //Takes word data and renders to screen
+    props: ['words'],
+    template: "<span class = 'mr-5'>{{words.text}}</span>"
+})
+
+var app = new Vue({
+    el: '#app',
+    data: {
+      wordBatchData: wordBatch
+    }
+})
+
 
 /*===========HELPER FUNCTIONS===========*/
+function readWordFile(){
+    //Read textfile into memory
+    let filePath = '../model/wordList.txt'
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", filePath, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if (rawFile.readyState === 4)
+        {
+            if (rawFile.status === 200 || rawFile.status == 0)
+            {
+                document.textfile = rawFile.responseText.split('\n');
+            }
+        }
+    }
+    rawFile.send(null);
+    setWordBatch(randWords())
+}
+
 function randWords(){
-    //Read text file of 200 words and return
-    //10 random words
+    //Read text file of 1000 words and return
+    //9 random words
+    let randWordList = []
+    for (let i = 0; i < wordsPerPage; i++){
+        let randWord = document.textfile[Math.floor(Math.random() * document.textfile.length)].trim() //remember to trim whitespace!
+        randWordList.push({id: i, text: randWord})
+    }
+    console.log(randWordList)
+    return randWordList
 }
 
 function getCurrentWord(index){
@@ -85,4 +124,9 @@ function resetCSS(){
         let element = document.getElementById('word'+String(i+1)) 
         element.style.color = 'black'
     }
+}
+
+function setWordBatch(wordList){
+    //Set vue word data to new wordlist
+    app.wordBatchData = wordList
 }
