@@ -6,7 +6,7 @@ wordBatch = null
 /*===========DOM FUNCTIONS===========*/
 function handleInput(){
     //compare both words to highlight either green or red
-    let currentTyped = document.getElementById('inputText').value
+    let currentTyped = document.getElementById('inputText').value.trim()
     let currentWord = getCurrentWord(wordCounter)
     let correctFlag = true //Whether or not what is typed is actually correct
 
@@ -27,10 +27,10 @@ function handleInput(){
 }
 
 function wordEntered(){
-    let currentTyped = document.getElementById('inputText').value
+    let currentTyped = document.getElementById('inputText').value.trim()
     let currentWord = getCurrentWord(wordCounter)
     if (currentTyped){
-        if (event.key === 'Enter'){
+        if (event.keyCode === 32){ //spacebar
             //Handles setting color of word entered
             currentWord.style.backgroundColor = 'transparent'
             if (currentTyped === currentWord.textContent){
