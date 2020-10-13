@@ -1,5 +1,5 @@
 # 10FastFingersClone
-An attempt to reproduce 10FastFingers and most of its functionality using mostly vanilla javascript and Vue
+A barebones attempt to reproduce 10FastFingers and some of its functionality using mostly vanilla javascript and Vue
 
 # Screenshots
 ![pic](./images/capture1.png)
